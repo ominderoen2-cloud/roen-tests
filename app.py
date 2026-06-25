@@ -6,6 +6,6 @@ app.register_blueprint(member_bp)
 @app.route("/")
 def home():
     return {"status":"api running"}
-create_table
+create_table()
 if __name__ == "__main__":
     app.run(host ="0.0.0.0" , port = 432 , debug=True)
