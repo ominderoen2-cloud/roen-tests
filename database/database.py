@@ -4,7 +4,7 @@ import psycopg2
 
 load_dotenv()
 def connect_db():
-    return psycopg2.connect(os.getenv("DATABASE_URL"))
+    return psycopg2.connect(os.getenv("DATABASE_URL") , sslmode = "require")
 def create_table():
     conn = connect_db()
     cursor = conn.cursor()

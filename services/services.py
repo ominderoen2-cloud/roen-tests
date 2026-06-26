@@ -19,9 +19,7 @@ def remove_member(member_id):
         return {"message":"member not fpound"} , 404
     return {"message":"member successfully deleted"} , 200
 def update_member(data ,member_id):
-    clean_data , error , status = validate_member_data(data)
-    if error:
-        return error , status
+    clean_data  = validate_member_data(data)
     success = update_member_data(clean_data["name"] , clean_data["credit"] , member_id)
     if not success:
         return {"message":"not updated"},400
@@ -30,7 +28,7 @@ def get_by_id(member_id):
     conn = connect_db()
     cursor = conn.cursor()
     try:
-       cursor.execute("SELECT FROM enneclub WHERE id = %s", (member_id,))
+       cursor.execute("SELECT name , credit FROM enneclub WHERE id = %s", (member_id,))
     except FileNotFoundError:
         return {"message":"member not found"}
     row = cursor.fetchone()
