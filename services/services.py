@@ -7,7 +7,12 @@ def create_member(data):
         return {"message":"user already exists"} , 409
     return {"message":"successfully registered"} , 201
 def list_member():
-    return get_all_members , 200
+    data = get_all_members()
+
+    print("DATA:", data)
+    print("TYPE:", type(data))
+
+    return data, 200
 def remove_member(member_id):
     success = delete_member(member_id)
     if not success :
@@ -25,12 +30,13 @@ def get_by_id(member_id):
     conn = connect_db()
     cursor = conn.cursor()
     try:
-       cursor.execute("SELECT FROM enneclub WHERE id = ?", (member_id,))
+       cursor.execute("SELECT FROM enneclub WHERE id = %s", (member_id,))
     except FileNotFoundError:
         return {"message":"member not found"}
     row = cursor.fetchone()
-    return [
-        {"id":r[0] , "name":r[1] , "credit":r[2]}
-        for r in row
-    ]
+    if row is None:
+       return{ 
+        "id":row[0] , "name":row[1] , "credit":row[2]}
+        
+    
 

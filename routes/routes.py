@@ -12,8 +12,10 @@ def delete(member_id):
 @member_bp.route ("/member" , methods = ["GET"])
 def list_all():
     response , status = list_member()
+    print(response)
+    print(type(response))
     return jsonify(response) , status
-@member_bp.route("/member/<member_id>" , methods = ["UPDATE"] )
+@member_bp.route("/member/<member_id>" , methods = ["PUT"] )
 def update(member_id):
     response , status = update_member(request.json ,member_id )
     return jsonify(response) , status

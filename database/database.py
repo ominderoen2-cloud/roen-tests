@@ -1,6 +1,10 @@
-import sqlite3
+import os
+from dotenv import load_dotenv
+import psycopg2
+
+load_dotenv()
 def connect_db():
-    return sqlite3.connect("enneclub.db")
+    return psycopg2.connect(os.getenv("DATABASE_URL"))
 def create_table():
     conn = connect_db()
     cursor = conn.cursor()
@@ -11,10 +15,10 @@ def add_member(member_id ,name, credit_score):
     conn = connect_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO enneclub (  id , name , credit) VALUES (?,?,?)" ,( member_id ,name , credit_score))
+        cursor.execute("INSERT INTO enneclub (  id , name , credit) VALUES (%s,%s,%s)" ,( member_id ,name , credit_score))
         conn.commit()
         return True
-    except sqlite3.IntegrityError:
+    except psycopg2.IntegrityError:
         return False
 
     
@@ -32,7 +36,7 @@ def get_all_members():
 def update_member_data(name , credit_score , member_id):
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("UPDATE  enneclub SET name =? , credit= ? , WHERE id = ? ", (name , credit_score ,member_id,))
+    cursor.execute("UPDATE  enneclub SET name = %s , credit= %s  WHERE id = %s ", (name , credit_score ,member_id,))
     conn.commit()
     updated = cursor.rowcount
     conn.close()
@@ -40,7 +44,7 @@ def update_member_data(name , credit_score , member_id):
 def delete_member(member_id):
     conn = connect_db()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM enneclub WHERE id = ?", (member_id,))
+    cursor.execute("DELETE FROM enneclub WHERE id = %s", (member_id,))
     conn.commit()
     deleted = cursor.rowcount
     conn.close()
