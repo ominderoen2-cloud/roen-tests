@@ -33,7 +33,8 @@ def get_by_id(member_id):
         return {"message":"member not found"}
     row = cursor.fetchone()
     if row is None:
-       return{ 
+       return{"message":"member not found"} , 404
+    return{ 
         "id":row[0] , "name":row[1] , "credit":row[2]}
         
     
