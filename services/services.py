@@ -27,15 +27,15 @@ def update_member(data ,member_id):
 def get_by_id(member_id):
     conn = connect_db()
     cursor = conn.cursor()
-    try:
-       cursor.execute("SELECT name , credit FROM enneclub WHERE id = %s", (member_id,))
-    except FileNotFoundError:
-        return {"message":"member not found"}
+    
+    cursor.execute("SELECT id ,name , credit FROM enneclub WHERE id = %s", (member_id,))
     row = cursor.fetchone()
+
     if row is None:
-       return{"message":"member not found"} , 404
+       return {"message": "member not found"}, 404
+
     return{ 
-        "id":row[0] , "name":row[1] , "credit":row[2]}
+        "id":row[0] , "name":row[1] , "credit":row[2]},200
         
     
 
